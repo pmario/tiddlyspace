@@ -13,13 +13,15 @@ from tiddlyweb.control import readable_tiddlers_by_bag
 from tiddlyweb.store import StoreError, NoUserError
 from tiddlyweb.model.tiddler import Tiddler
 from tiddlyweb.model.user import User
+from tiddlyweb.wikitext import render_wikitext
 from tiddlyweb.web.handler.search import get as search
 from tiddlyweb.web.util import (server_host_url, encode_name,
         get_serialize_type, tiddler_url, get_route_value)
+
+from tiddlywebplugins.utils import get_store
+
 from tiddlywebplugins.tiddlyspace.spaces import space_uri
 from tiddlywebplugins.tiddlyspace.web import determine_host
-from tiddlyweb.wikitext import render_wikitext
-from tiddlywebplugins.utils import get_store
 from tiddlywebplugins.tiddlyspace.template import send_template
 
 
@@ -101,6 +103,7 @@ def html_profile(environ, start_response):
 
     return send_template(environ, 'tsprofile.html', {
         'css': ['/bags/common/tiddlers/profile.css'],
+        'title': 'Profile for %s' % username,
         'username': username,
         'activity_feed': activity_feed,
         'avatar_path': avatar_path,
@@ -221,7 +224,7 @@ try:
                 status = response.getcode()
                 LOGGER.warn('sent %s to %s got %s',
                         encoded_data, target, status)
-                if status != '204':
+                if status != 204:
                     LOGGER.warn('non 204 response from hub: %s', status)
             except urllib2.HTTPError, exc:
                 if exc.code != 204:

@@ -1,4 +1,3 @@
-tiddler: https://github.com/tiddlyweb/tiddlyweb.com/raw/master/tiddlyweb.css
 tiddler: icons/defaultSiteIcon.tid
 tiddler: icons/defaultUserIcon.tid
 tiddler: lib/bookmark_bubble.js.js
@@ -16,21 +15,28 @@ tiddler: lib/jquery-form.js.js
 tiddler: lib/jquery.timeago.js.js
 tiddler: lib/run-timeago.js.js
 tiddler: lib/es5-shim.min.js.js
+tiddler: lib/html5.js.js
 tiddler: icons/close.png.tid
 tiddler: icons/backstage.png.tid
 tiddler: icons/shim.tid
-tiddler: externals/alpha_jquery.js.js
-tiddler: externals/alpha_jQuery.twStylesheet.js.js
-tiddler: externals/alpha_twcore.js.js
 tiddler: styles/profile.css
 tiddler: styles/HtmlBackground.tid
-recipe: apps/apps.recipe
+tiddler: styles/tiddlyweb.css
+recipe: common/apps.recipe
+
+# externalized tiddlywiki files
+tiddler: externals/beta_jquery.js.js
+tiddler: externals/beta_jQuery.twStylesheet.js.js
+tiddler: externals/beta_twcore.js.js
+tiddler: externals/jQuery.twStylesheet.js.js
+tiddler: externals/twcore.js.js
+tiddler: externals/twjquery.js.js
 
 # appspage common files
-tiddler: system-applications/appspagecss.tid
-tiddler: system-applications/appspagejs.tid
-tiddler: system-applications/admin.css.tid
-tiddler: system-applications/space.js.js
+tiddler: tiddlyspace/appspagecss.tid
+tiddler: tiddlyspace/appspagejs.tid
+tiddler: tiddlyspace/admin.css.tid
+tiddler: tiddlyspace/space.js.js
 
 # Icons used by the appswitcher
 tiddler: icons/browse_read_blue.png.tid
@@ -46,10 +52,16 @@ tiddler: icons/help.png.tid
 tiddler: icons/ajax-loader.gif.tid
 
 # reply button common files
-tiddler: https://raw.github.com/bengillies/ts-reply/master/_reply-button.js.tid
-tiddler: https://raw.github.com/bengillies/ts-reply/master/_reply-loader.js.tid
-tiddler: https://raw.github.com/bengillies/ts-reply/master/_reply.js.tid
-tiddler: https://raw.github.com/bengillies/ts-reply/master/reply.png.tid
+tiddler: https://raw.github.com/tiddlyspace/ts-reply/master/_reply-button.js.tid
+tiddler: https://raw.github.com/tiddlyspace/ts-reply/master/_reply-loader.js.tid
+tiddler: https://raw.github.com/tiddlyspace/ts-reply/master/_reply.js.tid
+tiddler: https://raw.github.com/tiddlyspace/ts-reply/master/reply.png.tid
 
 # normalize.css
-tiddler: https://github.com/necolas/normalize.css/raw/master/normalize.css
+tiddler: lib/normalize.css
+
+# syndication icon
+tiddler: common/syndication.png
+
+# clean1
+tiddler: common/clean1.css

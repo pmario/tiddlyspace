@@ -1,8 +1,9 @@
 """
-extend TiddlyWiki serialization to optionally use alpha, beta or
+extend TiddlyWiki serialization to optionally use beta or
 externalized releases and add the UniversalBackstage.
 
-activated via "twrelease=beta" URL parameter, see build_config_var
+activated via "twrelease=beta" URL parameter or ServerSettings,
+see build_config_var
 """
 
 
@@ -12,11 +13,13 @@ from tiddlyweb.util import read_utf8_file
 
 from tiddlywebwiki.serialization import Serialization as WikiSerialization
 
+from tiddlywebplugins.tiddlyspace.web import (determine_host,
+        determine_space, determine_space_recipe)
 
 LOGGER = logging.getLogger(__name__)
 
 
-def build_config_var(alpha=False, beta=False, external=False):
+def build_config_var(beta=False, external=False):
     """
     Create the configuration key which will be used to locate
     the base tiddlywiki file.
@@ -26,22 +29,34 @@ def build_config_var(alpha=False, beta=False, external=False):
         base += '_external'
     if beta:
         base += '_beta'
-    elif alpha:
-        base += '_alpha'
     return base
 
 
 class Serialization(WikiSerialization):
     """
     Subclass of the standard TiddlyWiki serialization to allow
-    choosing other, alpha, beta or externalized versions of
-    the base empty.html in which the tiddlers will be servered.
+    choosing beta or externalized versions of the base empty.html
+    in which the tiddlers will be servered.
 
     Also, if the TiddlyWiki is not being downloaded, add
     the UniversalBackstage by injecting a script tag.
     """
+
+    def list_tiddlers(self, tiddlers):
+        """
+        Override tiddlers.link so the location in noscript is to
+        /tiddlers.
+        """
+        http_host, _ = determine_host(self.environ)
+        space_name = determine_space(self.environ, http_host)
+        if space_name:
+            recipe_name = determine_space_recipe(self.environ, space_name)
+            if '/recipes/%s' % recipe_name in tiddlers.link:
+                tiddlers.link = '/tiddlers'
+        return WikiSerialization.list_tiddlers(self, tiddlers)
+
     def _get_wiki(self):
-        alpha = beta = external = False
+        beta = external = False
 
         release = self.environ.get('tiddlyweb.query', {}).get(
                 'twrelease', [False])[0]
@@ -52,8 +67,6 @@ class Serialization(WikiSerialization):
 
         if release == 'beta':
             beta = True
-        if release == 'alpha':
-            alpha = True
         if externalize:
             external = True
 
@@ -63,8 +76,8 @@ class Serialization(WikiSerialization):
             external = False
 
         wiki = None
-        if alpha or beta or external:
-            config_var = build_config_var(alpha, beta, external)
+        if beta or external:
+            config_var = build_config_var(beta, external)
             LOGGER.debug('looking for %s', config_var)
             base_wiki_file = self.environ.get('tiddlyweb.config',
                     {}).get(config_var, '')

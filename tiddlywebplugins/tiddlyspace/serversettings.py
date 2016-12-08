@@ -11,10 +11,11 @@ from tiddlywebplugins.tiddlyspace.web import determine_space, determine_host
 from tiddlywebplugins.tiddlyspace.space import Space
 
 SPACE_SERVER_SETTINGS = 'ServerSettings'
-SERVER_SETTINGS_KEYS = ['index', 'editor']
+SERVER_SETTINGS_KEYS = ['index', 'editor', 'htmltemplate']
 DEFAULT_SERVER_SETTINGS = {
         'index': '',
         'editor': '',
+        'htmltemplate': '',
         'extra_query': ''}
 DEFAULT_NEWUSER_APP = 'apps'
 DEFAULT_SPACE_NAME = 'frontpage'
@@ -45,7 +46,7 @@ def update_space_settings(environ, name):
     space's public bag. Parse each line as a key:value pair which
     is then injected tiddlyweb.query. The goal here is to allow
     a space member to force incoming requests to use specific
-    settings, such as alpha or externalized.
+    settings, such as beta or externalized.
     """
     store = environ['tiddlyweb.store']
     # double assign to avoid later updates to the defaults

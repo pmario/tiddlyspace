@@ -23,6 +23,7 @@ from tiddlyweb.web.util import get_serialize_type, get_route_value
 
 from tiddlywebplugins.utils import require_any_user
 
+from tiddlywebplugins.tiddlyspace.space import Space
 from tiddlywebplugins.tiddlyspace.web import (determine_host,
         determine_space, determine_space_recipe)
 
@@ -78,6 +79,25 @@ def get_space_tiddlers(environ, start_response):
 
     ext = environ.get('tiddlyweb.extension')
     types = environ['tiddlyweb.config']['extension_types']
+
+    # If not a wiki, limit the tiddlers
+    if 'text/x-tiddlywiki' not in environ['tiddlyweb.type']:
+        # If sort filter not set, sort by -modified
+        filter_types = [filter[1][0]
+                for filter in environ['tiddlyweb.filters']]
+        if 'sort' not in filter_types:
+            environ['tiddlyweb.filters'] = parse_for_filters(
+                    'sort=-modified', environ)[0] + environ['tiddlyweb.filters']
+
+        # Filter out core bags.
+        core_bag_filters = []
+        for bag in Space.core_bags():
+            core_bag_filters.append('select=bag:!%s' % bag)
+        core_bag_filters = parse_for_filters(';'.join(core_bag_filters),
+                environ)[0]
+        environ['tiddlyweb.filters'] = (core_bag_filters
+                + environ['tiddlyweb.filters'])
+
     if ext and ext not in types:
         environ['wsgiorg.routing_args'][1]['recipe_name'] += '.%s' % ext
     return get_tiddlers(environ, start_response)
